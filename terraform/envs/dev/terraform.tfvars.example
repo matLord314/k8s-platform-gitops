@@ -1,0 +1,8 @@
+kubernetes_host = "https://kubernetes.default.svc"
+kubernetes_ca_cert = <<-EOT
+-----BEGIN CERTIFICATE-----
+REPLACE_WITH_CLUSTER_CA
+-----END CERTIFICATE-----
+EOT
+token_reviewer_jwt     = "REPLACE_WITH_REVIEWER_JWT"
+disable_iss_validation = true

@@ -1,0 +1,7 @@
+path "${mount_path}/data/demo-app/*" {
+  capabilities = ["read"]
+}
+
+path "${mount_path}/metadata/demo-app/*" {
+  capabilities = ["read", "list"]
+}
