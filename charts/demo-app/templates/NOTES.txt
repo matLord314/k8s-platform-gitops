@@ -1,0 +1,5 @@
+{{ include "demo-app.fullname" . }} is in {{ .Release.Namespace }}.
+
+ServiceMonitor is labeled release=kube-prometheus-stack.
+{{ .Values.vault.secretName }} is an optional mount, so the pod starts
+before External Secrets creates it.

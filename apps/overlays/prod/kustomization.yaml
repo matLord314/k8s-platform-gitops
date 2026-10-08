@@ -1,0 +1,52 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+labels:
+  - includeSelectors: false
+    pairs:
+      environment: prod
+patches:
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+    patch: |-
+      - op: remove
+        path: /spec/syncPolicy/automated
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: ingress-nginx
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/helm/valueFiles/0
+        value: $values/platform/ingress-nginx/values-prod.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: kube-prometheus-stack
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/helm/valueFiles/0
+        value: $values/platform/kube-prometheus-stack/values-prod.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: vault
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/helm/valueFiles/0
+        value: $values/platform/vault/values-prod.yaml
+  - target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: demo-app
+    patch: |-
+      - op: replace
+        path: /spec/source/helm/valueFiles/0
+        value: values-prod.yaml
