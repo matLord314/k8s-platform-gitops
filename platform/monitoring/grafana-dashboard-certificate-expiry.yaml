@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: certificate-expiry
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  certificate-expiry.json: |
+    {
+      "uid": "certificate-expiry",
+      "title": "Certificate expiry",
+      "tags": ["certificates"],
+      "schemaVersion": 39,
+      "version": 1,
+      "refresh": "1m",
+      "timezone": "utc",
+      "time": {"from": "now-6h", "to": "now"},
+      "panels": [
+        {
+          "id": 1,
+          "type": "stat",
+          "title": "Days until certificate expiry",
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "(certmanager_certificate_expiration_timestamp_seconds - time()) / 86400",
+              "legendFormat": "{{namespace}}/{{name}}"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "d",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "red", "value": null},
+                  {"color": "yellow", "value": 14},
+                  {"color": "green", "value": 30}
+                ]
+              }
+            }
+          },
+          "options": {
+            "reduceOptions": {"calcs": ["lastNotNull"]},
+            "colorMode": "background"
+          }
+        }
+      ]
+    }

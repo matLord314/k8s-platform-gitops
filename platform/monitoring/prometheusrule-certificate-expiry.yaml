@@ -1,0 +1,37 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: certificate-expiry
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: certificates.rules
+      rules:
+        - alert: CertificateExpiringSoon
+          expr: >-
+            (certmanager_certificate_expiration_timestamp_seconds - time())
+            < 14 * 24 * 3600
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: >-
+              Certificate {{ $labels.namespace }}/{{ $labels.name }}
+              expires in less than 14 days
+            description: >-
+              Time remaining is {{ $value | humanizeDuration }}.
+        - alert: CertificateExpiringCritical
+          expr: >-
+            (certmanager_certificate_expiration_timestamp_seconds - time())
+            < 3 * 24 * 3600
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: >-
+              Certificate {{ $labels.namespace }}/{{ $labels.name }}
+              expires in less than 3 days
+            description: >-
+              Time remaining is {{ $value | humanizeDuration }}.
