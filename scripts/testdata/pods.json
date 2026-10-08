@@ -1,0 +1,37 @@
+{
+  "pods": [
+    {
+      "namespace": "demo-app",
+      "name": "demo-app-aaa",
+      "containers": [
+        {
+          "name": "app",
+          "requests": {"cpu": "100m", "memory": "128Mi"},
+          "usage": {"cpu": "5m", "memory": "40Mi"}
+        }
+      ]
+    },
+    {
+      "namespace": "payments",
+      "name": "api-bbb",
+      "containers": [
+        {
+          "name": "api",
+          "requests": {"cpu": "50m", "memory": "64Mi"},
+          "usage": {"cpu": "48m", "memory": "62Mi"}
+        }
+      ]
+    },
+    {
+      "namespace": "batch",
+      "name": "worker-ccc",
+      "containers": [
+        {
+          "name": "worker",
+          "requests": {"memory": "256Mi"},
+          "usage": {"cpu": "20m", "memory": "100Mi"}
+        }
+      ]
+    }
+  ]
+}
